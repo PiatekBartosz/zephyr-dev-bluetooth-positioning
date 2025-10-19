@@ -1,12 +1,9 @@
 PROJECT_NAME = main
 BUILD_DIR = _build
 DEPLOY_DIR = _deploy
+BLOBS_DIR = /opt/zephyr/modules/hal/espressif/zephyr/blobs/lib/esp32/
 
-BOARD = "nucleo_h723zg"
-
-#TODO: add later
-# OVERLAY = "src/boards/stm32h7.overlay"
-#  -DDTC_OVERLAY_FILE=$(OVERLAY) 
+BOARD = "m5stack_core2/esp32/procpu"
 
 .PHONY: all cmake build clean run rebuild
 
@@ -21,11 +18,20 @@ build:
 # Clean the build directory
 clean:
 	rm -rf $(BUILD_DIR)
+	rm -rf $(DEPLOY_DIR)
+	
+# Fetch esp32 blobs if they are not already provided
+fetch_blobs:
+	west blobs fetch hal espressif
 
 # Run the compiled executable
 deploy: build
 	mkdir -p $(DEPLOY_DIR)
-	cp $(BUILD_DIR)/zephyr/zephyr.elf $(DEPLOY_DIR)/
+	cp $(BUILD_DIR)/zephyr/zephyr.bin $(DEPLOY_DIR)
+
+# Flash the board
+flash:
+	./tools/esptool/flash.sh
 
 # Rebuild the project from scratch
 rebuild: clean all
