@@ -14,6 +14,7 @@ all: build deploy
 build:
 	mkdir -p $(BUILD_DIR)
 	cmake -B _build -S . -GNinja -DBOARD=${BOARD} && ninja -C _build
+	echo "Build done!"
 
 # Clean the build directory
 clean:
@@ -25,9 +26,10 @@ fetch_blobs:
 	west blobs fetch hal espressif
 
 # Run the compiled executable
-deploy: build
+deploy:
 	mkdir -p $(DEPLOY_DIR)
 	cp $(BUILD_DIR)/zephyr/zephyr.bin $(DEPLOY_DIR)
+	echo "Deploy done!"
 
 # Flash the board
 flash:
