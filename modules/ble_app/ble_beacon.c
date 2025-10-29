@@ -1,4 +1,4 @@
-#include "ble/ble_beacon.h"
+#include "ble_beacon.h"
 
 #include <zephyr/bluetooth/bluetooth.h>
 #include <zephyr/logging/log.h>
