@@ -7,7 +7,12 @@ BOARD = "esp32s3_devkitm/esp32s3/procpu"
 
 BUILD_TYPE = Debug
 
-.PHONY: all cmake build clean run rebuild
+FORMAT_EXTENSIONS = -name "*.c" -o -name "*.h" -o -name "*.cpp" -o -name "*.hpp"
+SOURCE_FILES_TO_FORMAT := $(shell find src/ \( $(FORMAT_EXTENSIONS) \))
+
+CLANG_FORMAT = clang-format ./.clang-format
+
+.PHONY: all cmake build clean run rebuild format
 
 all: build deploy
 
@@ -29,3 +34,11 @@ flash:
 	./tools/esptool/flash.sh
 
 rebuild: clean all
+
+format:
+	@if [ -z "$(SOURCE_FILES_TO_FORMAT)" ]; then \
+		echo "No source files found to format."; \
+	else \
+		${CLANG_FORMAT} -i $(SOURCE_FILES_TO_FORMAT) \
+		echo "Formatting complete."; \
+	fi

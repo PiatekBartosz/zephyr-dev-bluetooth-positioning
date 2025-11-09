@@ -1,6 +1,5 @@
 #include "app/app.h"
 
-int main(void)
-{
+int main(void) {
     return app_init();
 }
