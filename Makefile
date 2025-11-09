@@ -1,70 +1,47 @@
-# ===== Makefile =====
-PROJECT_NAME := main
-BUILD_DIR := _build
+PROJECT_NAME=main
+BUILD_DIR=_build
 
-TAG_BUILD_DIR := $(BUILD_DIR)/tag
-BEACON_BUILD_DIR := $(BUILD_DIR)/beacon
+TAG_BUILD_DIR=${BUILD_DIR}/tag
+BEACON_BUILD_DIR=${BUILD_DIR}/beacon
 
-TAG_SOURCES := app/tag
-BEACON_SOURCES := app/beacon
+TAG_SOURCES=app/tag
+BEACON_TAG_SOURCES=app/beacon
 
-DEPLOY_DIR := _deploy
-BLOBS_DIR := /opt/zephyr/modules/hal/espressif/zephyr/blobs/lib/esp32/
+DEPLOY_DIR = _deploy
+BLOBS_DIR = /opt/zephyr/modules/hal/espressif/zephyr/blobs/lib/esp32/
 
-# Default board (can override on command line: make BOARD=myboard)
-BOARD ?= m5stack_core2/esp32/procpu
-# BOARD ?= esp32s3_devkitc/esp32s3/procpu
+BOARD = "m5stack_core2/esp32/procpu"
 
-# Zephyr external modules
-ZEPHYR_EXTRA_MODULES := /workspace/modules/ble_app
-
-# Export so it's available to cmake/west environment
-export ZEPHYR_EXTRA_MODULES
-
-.PHONY: all build_tag build_beacon build clean deploy fetch_blobs flash rebuild
+.PHONY: all cmake build clean run rebuild
 
 all: build deploy
 
-# -------------------
-# Build Targets
-# -------------------
-
 build_tag:
-	@mkdir -p $(TAG_BUILD_DIR)
-	@echo ">>> Building Tag with BOARD=$(BOARD)"
-	@cmake -B $(TAG_BUILD_DIR) -S $(TAG_SOURCES) -GNinja -DBOARD=$(BOARD)
-	@ninja -C $(TAG_BUILD_DIR)
-	@echo "Tag build done!"
+	mkdir -p ${TAG_BUILD_DIR}
+	cmake -B ${TAG_BUILD_DIR} -S ${TAG_SOURCES} -GNinja -DBOARD=${BOARD} && ninja -C ${TAG_BUILD_DIR}
+	echo "Beacon build done!"
 
 build_beacon:
-	@mkdir -p $(BEACON_BUILD_DIR)
-	@echo ">>> Building Beacon with BOARD=$(BOARD)"
-	@cmake -B $(BEACON_BUILD_DIR) -S $(BEACON_SOURCES) -GNinja -DBOARD=$(BOARD)
-	@ninja -C $(BEACON_BUILD_DIR)
-	@echo "Beacon build done!"
+	mkdir -p ${BEACON_BUILD_DIR}
+	cmake -B ${BEACON_BUILD_DIR} -S ${BEACON_TAG_SOURCES} -GNinja -DBOARD=${BOARD} && ninja -C ${BEACON_BUILD_DIR}
+	echo "Tag build done!"
 
 build: build_tag build_beacon
-	@echo "All builds done!"
-
-# -------------------
-# Clean
-# -------------------
+	echo "Build done!"
 
 clean:
-	@rm -rf $(BUILD_DIR)
-	@rm -rf $(DEPLOY_DIR)
-	@echo "Clean done!"
-
-# -------------------
-# Zephyr blobs
-# -------------------
-
+	rm -rf $(BUILD_DIR)
+	rm -rf $(DEPLOY_DIR)
+	
 fetch_blobs:
-	@west blobs fetch hal espressif
-
-# -------------------
-# Deploy
-# -------------------
+	west blobs fetch hal espressif
 
 deploy:
-	@mkdir
+	mkdir -p $(DEPLOY_DIR)
+	cp $(BUILD_DIR)/zephyr/zephyr.bin $(DEPLOY_DIR)
+	echo "Deploy done!"
+
+flash:
+	./tools/esptool/flash.sh
+
+rebuild: clean all

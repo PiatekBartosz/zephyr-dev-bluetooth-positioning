@@ -6,17 +6,18 @@ project(app_tag LANGUAGES C)
 target_include_directories(app
     PRIVATE 
     app/
-    ${CMAKE_SOURCE_DIR}/../../modules/ble
 )
 
 target_sources(app
     PRIVATE 
     main.c
     app/app.c
+    app/ble/ble_beacon.c
 )
 
-target_link_libraries(app
-    PRIVATE
-    #TODO: figure out why then the modules is build outside of a tree this weird name shows up
-    ${CMAKE_BINARY_DIR}/modules/ble_app/lib..__..__..__workspace__modules__ble_app.a
+set_property(TARGET
+    app
+    PROPERTY
+    ZEPHYR_CONFIG
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../config/beacon.conf
 )

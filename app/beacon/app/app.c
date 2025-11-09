@@ -1,7 +1,7 @@
 #include <zephyr/logging/log.h>
 #include <zephyr/kernel.h>
 
-#include "ble_beacon.h"
+#include "ble/ble_beacon.h"
 #include "app.h"
 
 LOG_MODULE_REGISTER(app);
