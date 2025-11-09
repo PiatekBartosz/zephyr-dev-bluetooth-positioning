@@ -1,7 +1,12 @@
 #!/bin/bash
+
+BAUD=115200
+
 esptool --chip auto \
-    --baud 921600 \
+    erase_flash
+
+esptool --chip ESP32S3 \
+    --baud $BAUD \
     --before default_reset \
     --after hard_reset write_flash \
-    -u --flash_mode dio --flash_freq 40m \
-    --flash_size detect 0x1000 _deploy/zephyr.bin
+    --flash_size detect 0x0000 _deploy/zephyr.bin
