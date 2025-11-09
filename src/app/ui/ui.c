@@ -11,19 +11,14 @@ LOG_MODULE_REGISTER(ui);
 #error "Unsupported board: sw0 devicetree alias is not defined"
 #endif
 
-typedef enum ui_states_e { POST, CHECK_LAST, NEUTRAL, BEACON, TAG } ui_states_t;
-
 typedef struct ui_gpio_config_s {
     const struct gpio_dt_spec button;
     struct gpio_callback buttonCbData;
     const struct gpio_dt_spec led;
 
-    ui_states_t state;
-
 } ui_gpio_config_t;
 
 static ui_gpio_config_t ui_config = {
-    .state = POST,
     .button = GPIO_DT_SPEC_GET_OR(SW0_NODE, gpios, {0}),
     .led = GPIO_DT_SPEC_GET_OR(DT_ALIAS(led0), gpios, {0}),
 };
@@ -122,4 +117,9 @@ int ui_init(void) {
 
     LOG_INF("Initialized UI");
     return errorCode;
+}
+
+int ui_setColor(ui_states_t state)
+{
+
 }

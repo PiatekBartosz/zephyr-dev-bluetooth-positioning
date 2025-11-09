@@ -3,10 +3,17 @@
 #include "ble/ble_beacon.h"
 #include "ui/ui.h"
 
+#include <zephyr/smf.h>
+
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 
 LOG_MODULE_REGISTER(app);
+
+typedef enum app_states_e { POST, CHECK_LAST, NEUTRAL, BEACON, TAG } app_states_t;
+typedef struct app_config_s { struct smf_ctx ctx; } app_config_t;
+
+static 
 
 int app_init(void) {
     LOG_INF("Starting zephyr ble localization application!");
