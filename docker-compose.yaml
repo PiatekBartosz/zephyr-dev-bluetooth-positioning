@@ -1,8 +1,8 @@
 services:
   zephyr-dev-bluetooth-positioning:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
     image: piatekbartosz/zephyr-dev-bluetooth-positioning:1.0.2
     container_name: zephyr-dev-bluetooth-positioning
     volumes:

@@ -75,19 +75,16 @@ static int ui_initLed(void)
 
     do 
     {
-        if (!gpio_is_ready_dt(&led)) {
-            printk("LED device %s is not ready; ignoring it\n",
-                ret, led.port->name);
-            led.port = NULL;
+        if (!gpio_is_ready_dt(&ui_config.led)) {
+            LOG_ERR("LED device is not ready");
+            errorCode = -1;
+            break;
         }
-        if (led.port) {
-            ret = gpio_pin_configure_dt(&led, GPIO_OUTPUT);
-            if (ret != 0) {
-                printk("Error %d: failed to configure LED device %s pin %d\n",
-                    ret, led.port->name, led.pin);
-                led.port = NULL;
-            } else {
-                printk("Set up LED at %s pin %d\n", led.port->name, led.pin);
+        if (ui_config.led.port) {
+            errorCode = gpio_pin_configure_dt(&ui_config.led, GPIO_OUTPUT);
+            if (errorCode != 0) {
+                LOG_ERR("LED configuration error");
+                break;
             }
         }
 
@@ -101,16 +98,6 @@ int ui_init(void) {
     
     do 
     {
-        errorCode = ui_initButton();
-        if (errorCode != 0)
-        {
-            LOG_WRN("Skipping UI button initialization");
-        }
-        else
-        {
-            LOG_INF("Initialized UI button");
-        }
-
         errorCode = ui_initLed();
         if (errorCode != 0)
         {
@@ -121,8 +108,18 @@ int ui_init(void) {
             LOG_INF("Initialized UI LED");
         }
 
+        errorCode = ui_initButton();
+        if (errorCode != 0)
+        {
+            LOG_WRN("Skipping UI button initialization");
+        }
+        else
+        {
+            LOG_INF("Initialized UI button");
+        }
+
     } while (0);
 
     LOG_INF("Initialized UI");
-    return 0;
+    return errorCode;
 }

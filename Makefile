@@ -12,7 +12,7 @@ SOURCE_FILES_TO_FORMAT := $(shell find src/ \( $(FORMAT_EXTENSIONS) \))
 
 CLANG_FORMAT = clang-format ./.clang-format
 
-.PHONY: all cmake build clean run rebuild format
+.PHONY: all cmake build clean run rebuild format fetch_blobs
 
 all: build deploy
 
@@ -42,3 +42,6 @@ format:
 		${CLANG_FORMAT} -i $(SOURCE_FILES_TO_FORMAT) \
 		echo "Formatting complete."; \
 	fi
+
+fetch_blobs:
+	west blobs fetch hal_espressif

@@ -3,7 +3,7 @@
     "dockerComposeFile": [
         "../docker-compose.yaml"
     ],
-    "service": "zephyr-dev",
+    "service": "zephyr-dev-bluetooth-positioning",
     "remoteUser": "dev",
     "workspaceFolder": "/workspace",
     "customizations": {
