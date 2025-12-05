@@ -1,6 +1,6 @@
 #include "app.h"
 
-#include "ble/ble_beacon.h"
+#include "ble/ble_rtls.h"
 #include "ui/ui.h"
 
 #include <zephyr/smf.h>
@@ -10,10 +10,10 @@
 
 LOG_MODULE_REGISTER(app);
 
-typedef enum app_states_e { POST, CHECK_LAST, NEUTRAL, BEACON, TAG } app_states_t;
-typedef struct app_config_s { struct smf_ctx ctx; } app_config_t;
+// typedef enum app_states_e { POST, CHECK_LAST, NEUTRAL, BEACON, TAG } app_states_t;
+// typedef struct app_config_s { struct smf_ctx ctx; } app_config_t;
 
-static 
+// static 
 
 int app_init(void) {
     LOG_INF("Starting zephyr ble localization application!");
@@ -26,9 +26,9 @@ int app_init(void) {
             break;
         }
 
-        errorCode = ble_beacon_init();
+        errorCode = ble_rtls_init();
         if (errorCode != 0) {
-            LOG_ERR("Failed to initialize ble beacon error: %d", errorCode);
+            LOG_ERR("Failed to initialize ble rtls error: %d", errorCode);
             break;
         }
 
@@ -37,6 +37,6 @@ int app_init(void) {
     uint32_t appCoutner = 0;
     while (1) {
         k_sleep(K_SECONDS(10));
-        LOG_INF("Zephyr beacon application iteration= %d!\n", appCoutner++);
+        LOG_INF("Zephyr rtls application iteration= %d!\n", appCoutner++);
     }
 }

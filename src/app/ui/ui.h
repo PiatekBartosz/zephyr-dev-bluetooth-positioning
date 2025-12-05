@@ -1,4 +1,15 @@
-typedef enum ui_states_e { TAG, BEACON, ERROR } ui_states_t;
+#ifndef UI_H_
+#define UI_H_
+
+typedef enum ui_colors_e {
+    WHITE = 0,
+    YELLOW,
+    BLUE, 
+    RED,
+    SIZE_GUARD
+} ui_colors_t;
 
 int ui_init(void);
-int ui_setColor(ui_states_t state);
+int ui_setColor(ui_colors_t state);
+
+#endif /* UI_H_ */

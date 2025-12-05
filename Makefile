@@ -5,6 +5,8 @@ DEPLOY_DIR = _deploy
 # BOARD = "m5stack_core2/esp32/procpu"
 BOARD = "esp32s3_devkitm/esp32s3/procpu"
 
+OVERLAY_FILE = "boards/esp32s3_devkitm.overlay"
+
 BUILD_TYPE = Debug
 
 FORMAT_EXTENSIONS = -name "*.c" -o -name "*.h" -o -name "*.cpp" -o -name "*.hpp"
@@ -18,7 +20,11 @@ all: build deploy
 
 build:
 	mkdir -p $(BUILD_DIR)
-	cmake -B _build -S . -GNinja -DBOARD=${BOARD} -DBUILD_TYPE=${BUILD_TYPE} && ninja -C _build
+	cmake -B _build -S . -GNinja \
+		-DBOARD="${BOARD}" \
+		-DBUILD_TYPE="${BUILD_TYPE}" \
+		-DDTC_OVERLAY_FILE="${OVERLAY_FILE}" \
+		&& ninja -C _build
 	echo "Build done!"
 
 clean:
