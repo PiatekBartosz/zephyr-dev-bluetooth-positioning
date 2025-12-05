@@ -1,6 +1,9 @@
 annotated-types==0.7.0
 pydantic==2.12.5
 pydantic_core==2.41.5
+PyQt6==6.10.0
+PyQt6-Qt6==6.10.1
+PyQt6_sip==13.10.2
 pyserial==3.5
 typing-inspection==0.4.2
 typing_extensions==4.15.0
